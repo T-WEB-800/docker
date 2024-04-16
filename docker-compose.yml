@@ -51,10 +51,10 @@ services:
     env_file:
       - ./ert-webapp/.env
     ports:
-      - 80:80
+      - 80:8080
     volumes:
       - ../ert-webapp:/app
-    entrypoint: /app/entrypoint.sh
+    entrypoint: ["/bin/sh", "-c", "npm install && npm run start:dev"]
 
   database:
     container_name: database
