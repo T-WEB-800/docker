@@ -205,7 +205,7 @@ start-ert-adapter:
 	@echo $(SEPARATOR)
 
 start-ert-webapp:
-	@echo "\n$(INFO) [INFO] Starting webapp service $(RESET)\n"
+	@echo "\n$(INFO) [INFO] Starting ert-webapp service $(RESET)\n"
 	docker compose up -d ert-webapp
 	@echo "\n$(OK) [OK] webapp service started $(RESET)\n"
 	@echo $(SEPARATOR)
@@ -236,7 +236,7 @@ finish-ert-adapter:
 	docker exec ert-adapter composer install
 
 finish-ert-webapp:
-	docker exec webapp npm i
+	docker exec ert-webapp npm i
 
 ################
 #  END FINISH  #
