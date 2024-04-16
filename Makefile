@@ -206,7 +206,7 @@ start-ert-adapter:
 
 start-ert-webapp:
 	@echo "\n$(INFO) [INFO] Starting webapp service $(RESET)\n"
-	docker compose up -d webapp
+	docker compose up -d ert-webapp
 	@echo "\n$(OK) [OK] webapp service started $(RESET)\n"
 	@echo $(SEPARATOR)
 
