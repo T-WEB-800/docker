@@ -1,4 +1,4 @@
-WEBAPP_DIR=webapp
+ERT_WEBAPP_DIR=ert-webapp
 ERT_API_DIR=ert-api
 ERT_ADAPTER_DIR=ert-adapter
 NGINX_DIR=nginx
@@ -30,7 +30,7 @@ configure: configure-database \
 		   configure-adminer \
 		   configure-ert-api \
 		   configure-ert-adapter \
-		   configure-webapp
+		   configure-ert-webapp
 
 configure-database:
 	@echo "\n$(INFO) [INFO] Generating env file for database service $(RESET)\n"
@@ -103,15 +103,15 @@ configure-ert-adapter:
 
 	@echo $(SEPARATOR)
 
-configure-webapp: 
+configure-ert-webapp: 
 	@echo $(SEPARATOR)
-	@echo "\n$(INFO) [INFO] Copying configuration files to webapp directory $(RESET)\n"
-	cp ./$(WEBAPP_DIR)/.env.dist ./$(WEBAPP_DIR)/.env
-	cp ./$(WEBAPP_DIR)/.env.dist ../$(WEBAPP_DIR)/.env
-	cp ./$(WEBAPP_DIR)/Dockerfile ../$(WEBAPP_DIR)
-	cp ./$(WEBAPP_DIR)/.dockerignore ../$(WEBAPP_DIR)
-	cp ./$(WEBAPP_DIR)/entrypoint.sh ../$(WEBAPP_DIR)
-	@echo "\n$(OK) [OK] Copied configuration files to webapp directory $(RESET)\n"
+	@echo "\n$(INFO) [INFO] Copying configuration files to ert-webapp directory $(RESET)\n"
+	cp ./$(ERT_WEBAPP_DIR)/.env.dist ./$(ERT_WEBAPP_DIR)/.env
+	cp ./$(ERT_WEBAPP_DIR)/.env.dist ../$(ERT_WEBAPP_DIR)/.env
+	cp ./$(ERT_WEBAPP_DIR)/Dockerfile ../$(ERT_WEBAPP_DIR)
+	cp ./$(ERT_WEBAPP_DIR)/.dockerignore ../$(ERT_WEBAPP_DIR)
+	cp ./$(ERT_WEBAPP_DIR)/entrypoint.sh ../$(ERT_WEBAPP_DIR)
+	@echo "\n$(OK) [OK] Copied configuration files to ert-webapp directory $(RESET)\n"
 
 ###################
 #  END CONFIGURE  #
@@ -123,7 +123,7 @@ configure-webapp:
 
 build: build-ert-api \
 	   build-ert-adapter \
-	   build-webapp \
+	   build-ert-webapp \
 	   build-nginx
 
 build-ert-api:
@@ -133,15 +133,15 @@ build-ert-api:
 	@echo $(SEPARATOR)
 
 build-ert-adapter:
-	@echo "\n$(INFO) [INFO] Building ert-adapterq service $(RESET)\n"
+	@echo "\n$(INFO) [INFO] Building ert-adapter service $(RESET)\n"
 	docker compose build ert-adapter
 	@echo "\n$(OK) [OK] ert-adapter service built $(RESET)\n"
 	@echo $(SEPARATOR)
 
-build-webapp:
-	@echo "\n$(INFO) [INFO] Building webapp service $(RESET)\n"
-	docker compose build webapp
-	@echo "\n$(OK) [OK] webapp service built $(RESET)\n"
+build-ert-webapp:
+	@echo "\n$(INFO) [INFO] Building ert-webapp service $(RESET)\n"
+	docker compose build ert-webapp
+	@echo "\n$(OK) [OK] ert-webapp service built $(RESET)\n"
 	@echo $(SEPARATOR)
 
 build-nginx:
@@ -165,7 +165,7 @@ start: start-redis \
 	   start-adminer \
 	   start-ert-api \
 	   start-ert-adapter \
-	   start-webapp \
+	   start-ert-webapp \
 	   start-nginx 
 
 start-redis:
@@ -204,7 +204,7 @@ start-ert-adapter:
 	@echo "\n$(OK) [OK] ert-adapter service started $(RESET)\n"
 	@echo $(SEPARATOR)
 
-start-webapp:
+start-ert-webapp:
 	@echo "\n$(INFO) [INFO] Starting webapp service $(RESET)\n"
 	docker compose up -d webapp
 	@echo "\n$(OK) [OK] webapp service started $(RESET)\n"
@@ -227,7 +227,7 @@ start-nginx:
 
 finish: finish-ert-api \
 		finish-ert-adapter \
-		finish-webapp
+		finish-ert-webapp
 
 finish-ert-api:
 	docker exec ert-api composer install
@@ -235,7 +235,7 @@ finish-ert-api:
 finish-ert-adapter:
 	docker exec ert-adapter composer install
 
-finish-webapp:
+finish-ert-webapp:
 	docker exec webapp npm i
 
 ################
