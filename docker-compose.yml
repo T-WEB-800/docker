@@ -1,5 +1,3 @@
-version: "3.8"
-
 name: t-web-800
 
 services:
@@ -46,16 +44,16 @@ services:
     volumes:
       - ../ert-adapter:/app
 
-  webapp:
-    container_name: webapp
+  ert-webapp:
+    container_name: ert-webapp
     build:
-      context: ../webapp
+      context: ../ert-webapp
     env_file:
-      - ./webapp/.env
+      - ./ert-webapp/.env
     ports:
       - 80:80
     volumes:
-      - ../webapp:/app
+      - ../ert-webapp:/app
     entrypoint: /app/entrypoint.sh
 
   database:
