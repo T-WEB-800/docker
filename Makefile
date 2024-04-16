@@ -110,7 +110,6 @@ configure-ert-webapp:
 	cp ./$(ERT_WEBAPP_DIR)/.env.dist ../$(ERT_WEBAPP_DIR)/.env
 	cp ./$(ERT_WEBAPP_DIR)/Dockerfile ../$(ERT_WEBAPP_DIR)
 	cp ./$(ERT_WEBAPP_DIR)/.dockerignore ../$(ERT_WEBAPP_DIR)
-	cp ./$(ERT_WEBAPP_DIR)/entrypoint.sh ../$(ERT_WEBAPP_DIR)
 	@echo "\n$(OK) [OK] Copied configuration files to ert-webapp directory $(RESET)\n"
 
 ###################
