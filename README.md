@@ -10,6 +10,6 @@
 
 - Clone the project repositories (docker, api, webapp) in the same directory
 - Ensure your local directories are checked out on `develop`
-- Move into the docker directory (`cd docker`)
+- Move into the docker directory (`cd ert-docker`)
 - Run the following:
   - `make install`
