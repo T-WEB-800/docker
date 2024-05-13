@@ -77,7 +77,8 @@ configure-database:
 configure-adminer: 
 	@echo "\n$(INFO) [INFO] Generating env file for adminer service $(RESET)\n"
 	@cp ./$(DATABASE_DIR)/adminer.env.dist ./$(DATABASE_DIR)/adminer.env
-	if [ "$(OS)" = "Linux" ]; then \
+	
+	@if [ "$(OS)" = "Linux" ]; then \
 		sed -i "s/ADMINER_DEFAULT_SERVER=.*/ADMINER_DEFAULT_SERVER=\"database\"/" ./$(DATABASE_DIR)/adminer.env; \
 	else \
 		sed -i '' -e "s/ADMINER_DEFAULT_SERVER=.*/ADMINER_DEFAULT_SERVER=\"database\"/" ./$(DATABASE_DIR)/adminer.env; \
@@ -90,7 +91,7 @@ configure-ert-api:
 	@echo "\n$(INFO) [INFO] Copying configuration files to ert-api directory $(RESET)\n"
 	@cp ./$(ERT_API_DIR)/.env.dist ./$(ERT_API_DIR)/.env
 
-	if [ "$(OS)" = "Linux" ]; then \
+	@if [ "$(OS)" = "Linux" ]; then \
 		sed -i "s/DATABASE_HOST=.*/DATABASE_HOST=\"database\"/" ./$(ERT_API_DIR)/.env; \
 		sed -i "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(ERT_API_DIR)/.env; \
 	else \
@@ -98,24 +99,27 @@ configure-ert-api:
 		sed -i '' -e "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(ERT_API_DIR)/.env; \
 	fi
 
-	@DATABASE_USER=$$(grep -oP '^MARIADB_USER=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
-	if [ "$(OS)" = "Linux" ]; then \
+	@if [ "$(OS)" = "Linux" ]; then \
+		DATABASE_USER=$$(grep -oP '^MARIADB_USER=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
 	 	sed -i "s/DATABASE_USER=.*/DATABASE_USER=$$DATABASE_USER/" ./$(ERT_API_DIR)/.env; \
 	else \
+		DATABASE_USER=$$(sed -n 's/^MARIADB_USER=\(.*\)/\1/p' ./$(DATABASE_DIR)/mariadb.env); \
 	 	sed -i '' -e "s/DATABASE_USER=.*/DATABASE_USER=$$DATABASE_USER/" ./$(ERT_API_DIR)/.env; \
 	fi
 
-	@DATABASE_PASSWORD=$$(grep -oP '^MARIADB_PASSWORD=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
-	if [ "$(OS)" = "Linux" ]; then \
+	@if [ "$(OS)" = "Linux" ]; then \
+		DATABASE_PASSWORD=$$(grep -oP '^MARIADB_PASSWORD=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
 	 	sed -i "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=$$DATABASE_PASSWORD/" ./$(ERT_API_DIR)/.env; \
 	else \
+		DATABASE_PASSWORD=$$(sed -n 's/^MARIADB_PASSWORD=\(.*\)/\1/p' ./$(DATABASE_DIR)/mariadb.env); \
 	 	sed -i '' -e "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=$$DATABASE_PASSWORD/" ./$(ERT_API_DIR)/.env; \
 	fi 
-
-	@DATABASE_NAME=$$(grep -oP '^MARIADB_DATABASE=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
-	if [ "$(OS)" = "Linux" ]; then \
+	
+	@if [ "$(OS)" = "Linux" ]; then \
+		DATABASE_NAME=$$(grep -oP '^MARIADB_DATABASE=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
 	 	sed -i "s/DATABASE_NAME=.*/DATABASE_NAME=$$DATABASE_NAME/" ./$(ERT_API_DIR)/.env; \
 	else \
+		DATABASE_NAME=$$(sed -n 's/^MARIADB_DATABASE=\(.*\)/\1/p' ./$(DATABASE_DIR)/mariadb.env); \
 	 	sed -i '' -e "s/DATABASE_NAME=.*/DATABASE_NAME=$$DATABASE_NAME/" ./$(ERT_API_DIR)/.env; \
 	fi
 	
