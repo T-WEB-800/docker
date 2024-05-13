@@ -13,6 +13,8 @@ OK=$(shell tput setab 2 && tput bold)
 PROMPT=$(shell tput setaf 6 && tput bold)
 RESET=$(shell tput sgr0)
 
+OS=$(shell uname)
+
 ####################
 #  INFRASTRUCTURE  #
 ####################
@@ -35,32 +37,52 @@ configure: configure-database \
 configure-database:
 	@echo "\n$(INFO) [INFO] Generating env file for database service $(RESET)\n"
 	@cp ./database/mariadb.env.dist ./database/mariadb.env
-	
+	@echo "\n$(INFO) [INFO] Running on OS : $(OS) $(RESET)\n"
 	@echo "\n$(INFO) Configure variables for database server : $(RESET)\n"
 
 	@echo "\n$(PROMPT)MARIADB_ROOT_PASSWORD ? $(RESET)"
-	@read MARIADB_ROOT_PASSWORD; \
-	 sed -i "s/MARIADB_ROOT_PASSWORD=.*/MARIADB_ROOT_PASSWORD=\"$$MARIADB_ROOT_PASSWORD\"/" ./$(DATABASE_DIR)/mariadb.env;
+	@read -r MARIADB_ROOT_PASSWORD; \
+	if [ "$(OS)" = "Linux" ]; then \
+	 	sed -i "s/MARIADB_ROOT_PASSWORD=.*/MARIADB_ROOT_PASSWORD=\"$$MARIADB_ROOT_PASSWORD\"/" ./$(DATABASE_DIR)/mariadb.env; \
+	else \
+	 	sed -i '' -e "s/MARIADB_ROOT_PASSWORD=.*/MARIADB_ROOT_PASSWORD=\"$$MARIADB_ROOT_PASSWORD\"/" ./$(DATABASE_DIR)/mariadb.env; \
+	fi
 
 	@echo "\n$(PROMPT)MARIADB_USER ? $(RESET)"
-	@read MARIADB_USER; \
-	 sed -i "s/MARIADB_USER=.*/MARIADB_USER=\"$$MARIADB_USER\"/" ./$(DATABASE_DIR)/mariadb.env;
-
+	@read -r MARIADB_USER; \
+	if [ "$(OS)" = "Linux" ]; then \
+	 	sed -i "s/MARIADB_USER=.*/MARIADB_USER=\"$$MARIADB_USER\"/" ./$(DATABASE_DIR)/mariadb.env; \
+	else \
+		sed -i '' -e "s/MARIADB_ROOT_PASSWORD=.*/MARIADB_ROOT_PASSWORD=\"$$MARIADB_ROOT_PASSWORD\"/" ./$(DATABASE_DIR)/mariadb.env; \
+	fi
+	
 	@echo "\n$(PROMPT)MARIADB_PASSWORD ? $(RESET)"
-	@read MARIADB_PASSWORD; \
-	 sed -i "s/MARIADB_PASSWORD=.*/MARIADB_PASSWORD=\"$$MARIADB_PASSWORD\"/" ./$(DATABASE_DIR)/mariadb.env;
+	@read -r MARIADB_PASSWORD; \
+	if [ "$(OS)" = "Linux" ]; then \
+	 	sed -i "s/MARIADB_PASSWORD=.*/MARIADB_PASSWORD=\"$$MARIADB_PASSWORD\"/" ./$(DATABASE_DIR)/mariadb.env; \
+	else \
+	 	sed -i '' -e "s/MARIADB_PASSWORD=.*/MARIADB_PASSWORD=\"$$MARIADB_PASSWORD\"/" ./$(DATABASE_DIR)/mariadb.env; \
+	fi
 
 	@echo "\n$(PROMPT)MARIADB_DATABASE ? $(RESET)"
-	@read MARIADB_DATABASE; \
-	 sed -i "s/MARIADB_DATABASE=.*/MARIADB_DATABASE=\"$$MARIADB_DATABASE\"/" ./$(DATABASE_DIR)/mariadb.env;
-	 
+	@read -r MARIADB_DATABASE; \
+	if [ "$(OS)" = "Linux" ]; then \
+		sed -i "s/MARIADB_DATABASE=.*/MARIADB_DATABASE=\"$$MARIADB_DATABASE\"/" ./$(DATABASE_DIR)/mariadb.env; \
+	else \
+		sed -i '' -e "s/MARIADB_DATABASE=.*/MARIADB_DATABASE=\"$$MARIADB_DATABASE\"/" ./$(DATABASE_DIR)/mariadb.env; \
+	fi
+
 	@echo "\n$(OK) [OK] Generated env file for database service $(RESET)\n"
 	@echo $(SEPARATOR)
 
 configure-adminer: 
 	@echo "\n$(INFO) [INFO] Generating env file for adminer service $(RESET)\n"
 	@cp ./$(DATABASE_DIR)/adminer.env.dist ./$(DATABASE_DIR)/adminer.env
-	@sed -i "s/ADMINER_DEFAULT_SERVER=.*/ADMINER_DEFAULT_SERVER=\"database\"/" ./$(DATABASE_DIR)/adminer.env;
+	if [ "$(OS)" = "Linux" ]; then \
+		sed -i "s/ADMINER_DEFAULT_SERVER=.*/ADMINER_DEFAULT_SERVER=\"database\"/" ./$(DATABASE_DIR)/adminer.env; \
+	else \
+		sed -i '' -e "s/ADMINER_DEFAULT_SERVER=.*/ADMINER_DEFAULT_SERVER=\"database\"/" ./$(DATABASE_DIR)/adminer.env; \
+	fi 
 	
 	@echo "\n$(OK) [OK] Generated env file for adminer service $(RESET)\n"
 	@echo $(SEPARATOR)
@@ -69,6 +91,7 @@ configure-ert-api:
 	@echo "\n$(INFO) [INFO] Copying configuration files to ert-api directory $(RESET)\n"
 	@cp ./$(ERT_API_DIR)/.env.dist ./$(ERT_API_DIR)/.env
 
+<<<<<<< Updated upstream
 	@sed -i "s/DATABASE_HOST=.*/DATABASE_HOST=\"database\"/" ./$(ERT_API_DIR)/.env;
 	@sed -i "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(ERT_API_DIR)/.env;
 
@@ -85,6 +108,41 @@ configure-ert-api:
 	@cp ./$(ERT_API_DIR)/php/xdebug.ini ../$(ERT_API_DIR)/xdebug.ini
 	@cp ./$(ERT_API_DIR)/Dockerfile ../$(ERT_API_DIR)
 	@cp ./$(ERT_API_DIR)/.dockerignore ../$(ERT_API_DIR)
+=======
+	if [ "$(OS)" = "Linux" ]; then \
+		sed -i "s/DATABASE_HOST=.*/DATABASE_HOST=\"database\"/" ./$(API_DIR)/.env; \
+		sed -i "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(API_DIR)/.env; \
+	else \
+		sed -i '' -e "s/DATABASE_HOST=.*/DATABASE_HOST=\"database\"/" ./$(API_DIR)/.env; \
+		sed -i '' -e "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(API_DIR)/.env; \
+	fi
+
+	@DATABASE_USER=$$(grep -oP '^MARIADB_USER=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
+	if [ "$(OS)" = "Linux" ]; then \
+	 	sed -i "s/DATABASE_USER=.*/DATABASE_USER=$$DATABASE_USER/" ./$(API_DIR)/.env; \
+	else \
+	 	sed -i '' -e "s/DATABASE_USER=.*/DATABASE_USER=$$DATABASE_USER/" ./$(API_DIR)/.env; \
+	fi
+
+	@DATABASE_PASSWORD=$$(grep -oP '^MARIADB_PASSWORD=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
+	if [ "$(OS)" = "Linux" ]; then \
+	 	sed -i "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=$$DATABASE_PASSWORD/" ./$(API_DIR)/.env; \
+	else \
+	 	sed -i '' -e "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=$$DATABASE_PASSWORD/" ./$(API_DIR)/.env; \
+	fi 
+
+	@DATABASE_NAME=$$(grep -oP '^MARIADB_DATABASE=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
+	if [ "$(OS)" = "Linux" ]; then \
+	 	sed -i "s/DATABASE_NAME=.*/DATABASE_NAME=$$DATABASE_NAME/" ./$(API_DIR)/.env; \
+	else \
+	 	sed -i '' -e "s/DATABASE_NAME=.*/DATABASE_NAME=$$DATABASE_NAME/" ./$(API_DIR)/.env; \
+	fi
+	
+	@cp ./$(API_DIR)/.env ../$(API_DIR)/.env
+	@cp ./$(API_DIR)/php/xdebug.ini ../$(API_DIR)/xdebug.ini
+	@cp ./$(API_DIR)/Dockerfile ../$(API_DIR)
+	@cp ./$(API_DIR)/.dockerignore ../$(API_DIR)
+>>>>>>> Stashed changes
 
 	@echo "\n$(OK) [OK] Copied configuration files to ert-api directory $(RESET)\n"
 
