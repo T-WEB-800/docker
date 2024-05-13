@@ -37,7 +37,6 @@ configure: configure-database \
 configure-database:
 	@echo "\n$(INFO) [INFO] Generating env file for database service $(RESET)\n"
 	@cp ./database/mariadb.env.dist ./database/mariadb.env
-	@echo "\n$(INFO) [INFO] Running on OS : $(OS) $(RESET)\n"
 	@echo "\n$(INFO) Configure variables for database server : $(RESET)\n"
 
 	@echo "\n$(PROMPT)MARIADB_ROOT_PASSWORD ? $(RESET)"
