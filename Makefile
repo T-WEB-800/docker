@@ -90,24 +90,6 @@ configure-ert-api:
 	@echo "\n$(INFO) [INFO] Copying configuration files to ert-api directory $(RESET)\n"
 	@cp ./$(ERT_API_DIR)/.env.dist ./$(ERT_API_DIR)/.env
 
-<<<<<<< Updated upstream
-	@sed -i "s/DATABASE_HOST=.*/DATABASE_HOST=\"database\"/" ./$(ERT_API_DIR)/.env;
-	@sed -i "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(ERT_API_DIR)/.env;
-
-	@DATABASE_USER=$$(grep -oP '^MARIADB_USER=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
-	 sed -i "s/DATABASE_USER=.*/DATABASE_USER=$$DATABASE_USER/" ./$(ERT_API_DIR)/.env;
-
-	@DATABASE_PASSWORD=$$(grep -oP '^MARIADB_PASSWORD=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
-	 sed -i "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=$$DATABASE_PASSWORD/" ./$(ERT_API_DIR)/.env;
-
-	@DATABASE_NAME=$$(grep -oP '^MARIADB_DATABASE=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
-	 sed -i "s/DATABASE_NAME=.*/DATABASE_NAME=$$DATABASE_NAME/" ./$(ERT_API_DIR)/.env;
-
-	@cp ./$(ERT_API_DIR)/.env ../$(ERT_API_DIR)/.env
-	@cp ./$(ERT_API_DIR)/php/xdebug.ini ../$(ERT_API_DIR)/xdebug.ini
-	@cp ./$(ERT_API_DIR)/Dockerfile ../$(ERT_API_DIR)
-	@cp ./$(ERT_API_DIR)/.dockerignore ../$(ERT_API_DIR)
-=======
 	if [ "$(OS)" = "Linux" ]; then \
 		sed -i "s/DATABASE_HOST=.*/DATABASE_HOST=\"database\"/" ./$(API_DIR)/.env; \
 		sed -i "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(API_DIR)/.env; \
@@ -141,7 +123,6 @@ configure-ert-api:
 	@cp ./$(API_DIR)/php/xdebug.ini ../$(API_DIR)/xdebug.ini
 	@cp ./$(API_DIR)/Dockerfile ../$(API_DIR)
 	@cp ./$(API_DIR)/.dockerignore ../$(API_DIR)
->>>>>>> Stashed changes
 
 	@echo "\n$(OK) [OK] Copied configuration files to ert-api directory $(RESET)\n"
 
