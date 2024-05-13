@@ -91,38 +91,38 @@ configure-ert-api:
 	@cp ./$(ERT_API_DIR)/.env.dist ./$(ERT_API_DIR)/.env
 
 	if [ "$(OS)" = "Linux" ]; then \
-		sed -i "s/DATABASE_HOST=.*/DATABASE_HOST=\"database\"/" ./$(API_DIR)/.env; \
-		sed -i "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(API_DIR)/.env; \
+		sed -i "s/DATABASE_HOST=.*/DATABASE_HOST=\"database\"/" ./$(ERT_API_DIR)/.env; \
+		sed -i "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(ERT_API_DIR)/.env; \
 	else \
-		sed -i '' -e "s/DATABASE_HOST=.*/DATABASE_HOST=\"database\"/" ./$(API_DIR)/.env; \
-		sed -i '' -e "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(API_DIR)/.env; \
+		sed -i '' -e "s/DATABASE_HOST=.*/DATABASE_HOST=\"database\"/" ./$(ERT_API_DIR)/.env; \
+		sed -i '' -e "s/DATABASE_PORT=.*/DATABASE_PORT=\"3306\"/" ./$(ERT_API_DIR)/.env; \
 	fi
 
 	@DATABASE_USER=$$(grep -oP '^MARIADB_USER=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
 	if [ "$(OS)" = "Linux" ]; then \
-	 	sed -i "s/DATABASE_USER=.*/DATABASE_USER=$$DATABASE_USER/" ./$(API_DIR)/.env; \
+	 	sed -i "s/DATABASE_USER=.*/DATABASE_USER=$$DATABASE_USER/" ./$(ERT_API_DIR)/.env; \
 	else \
-	 	sed -i '' -e "s/DATABASE_USER=.*/DATABASE_USER=$$DATABASE_USER/" ./$(API_DIR)/.env; \
+	 	sed -i '' -e "s/DATABASE_USER=.*/DATABASE_USER=$$DATABASE_USER/" ./$(ERT_API_DIR)/.env; \
 	fi
 
 	@DATABASE_PASSWORD=$$(grep -oP '^MARIADB_PASSWORD=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
 	if [ "$(OS)" = "Linux" ]; then \
-	 	sed -i "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=$$DATABASE_PASSWORD/" ./$(API_DIR)/.env; \
+	 	sed -i "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=$$DATABASE_PASSWORD/" ./$(ERT_API_DIR)/.env; \
 	else \
-	 	sed -i '' -e "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=$$DATABASE_PASSWORD/" ./$(API_DIR)/.env; \
+	 	sed -i '' -e "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=$$DATABASE_PASSWORD/" ./$(ERT_API_DIR)/.env; \
 	fi 
 
 	@DATABASE_NAME=$$(grep -oP '^MARIADB_DATABASE=\K.*' ./$(DATABASE_DIR)/mariadb.env); \
 	if [ "$(OS)" = "Linux" ]; then \
-	 	sed -i "s/DATABASE_NAME=.*/DATABASE_NAME=$$DATABASE_NAME/" ./$(API_DIR)/.env; \
+	 	sed -i "s/DATABASE_NAME=.*/DATABASE_NAME=$$DATABASE_NAME/" ./$(ERT_API_DIR)/.env; \
 	else \
-	 	sed -i '' -e "s/DATABASE_NAME=.*/DATABASE_NAME=$$DATABASE_NAME/" ./$(API_DIR)/.env; \
+	 	sed -i '' -e "s/DATABASE_NAME=.*/DATABASE_NAME=$$DATABASE_NAME/" ./$(ERT_API_DIR)/.env; \
 	fi
 	
-	@cp ./$(API_DIR)/.env ../$(API_DIR)/.env
-	@cp ./$(API_DIR)/php/xdebug.ini ../$(API_DIR)/xdebug.ini
-	@cp ./$(API_DIR)/Dockerfile ../$(API_DIR)
-	@cp ./$(API_DIR)/.dockerignore ../$(API_DIR)
+	@cp ./$(ERT_API_DIR)/.env ../$(ERT_API_DIR)/.env
+	@cp ./$(ERT_API_DIR)/php/xdebug.ini ../$(ERT_API_DIR)/xdebug.ini
+	@cp ./$(ERT_API_DIR)/Dockerfile ../$(ERT_API_DIR)
+	@cp ./$(ERT_API_DIR)/.dockerignore ../$(ERT_API_DIR)
 
 	@echo "\n$(OK) [OK] Copied configuration files to ert-api directory $(RESET)\n"
 
