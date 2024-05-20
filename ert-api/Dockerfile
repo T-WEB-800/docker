@@ -1,7 +1,6 @@
 # Use PHP-FPM Alpine image
 FROM php:fpm-alpine3.19
 
-
 # Set working directory
 WORKDIR /app
 

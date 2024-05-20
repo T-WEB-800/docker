@@ -1,99 +1,99 @@
 name: t-web-800
 
 services:
-  ert-api-nginx:
-    container_name: ert-api-nginx
-    build:
-      context: ./nginx
-      dockerfile: ert-api/Dockerfile
-    volumes:
-      - ../ert-api:/app
-      - ./nginx/ert-api/ert-api.conf:/etc/nginx/conf.d/ert-api.conf
-    ports:
-      - 8080:80
-    depends_on:
-      - ert-api
+    ert-api-nginx:
+        container_name: ert-api-nginx
+        build:
+            context: ./nginx
+            dockerfile: ert-api/Dockerfile
+        volumes:
+            - ../ert-api:/app
+            - ./nginx/ert-api/ert-api.conf:/etc/nginx/conf.d/ert-api.conf
+        ports:
+            - 8080:80
+        depends_on:
+            - ert-api
 
-  ert-adapter-nginx:
-    container_name: ert-adapter-nginx
-    build:
-      context: ./nginx
-      dockerfile: ert-adapter/Dockerfile
-    volumes:
-      - ../ert-adapter:/app
-      - ./nginx/ert-adapter/ert-adapter.conf:/etc/nginx/conf.d/ert-adapter.conf
-    ports:
-      - 8081:80
-    depends_on:
-      - ert-adapter
+    ert-adapter-nginx:
+        container_name: ert-adapter-nginx
+        build:
+            context: ./nginx
+            dockerfile: ert-adapter/Dockerfile
+        volumes:
+            - ../ert-adapter:/app
+            - ./nginx/ert-adapter/ert-adapter.conf:/etc/nginx/conf.d/ert-adapter.conf
+        ports:
+            - 8081:80
+        depends_on:
+            - ert-adapter
 
-  ert-api:
-    container_name: ert-api
-    build:
-      context: ../ert-api
-    env_file:
-      - ./ert-api/.env
-    volumes:
-      - ../ert-api:/app
+    ert-api:
+        container_name: ert-api
+        build:
+            context: ../ert-api
+        env_file:
+            - ./ert-api/.env
+        volumes:
+            - ../ert-api:/app
 
-  ert-adapter:
-    container_name: ert-adapter
-    build:
-      context: ../ert-adapter
-    env_file: ./ert-adapter/.env
-    volumes:
-      - ../ert-adapter:/app
+    ert-adapter:
+        container_name: ert-adapter
+        build:
+            context: ../ert-adapter
+        env_file: ./ert-adapter/.env
+        volumes:
+            - ../ert-adapter:/app
 
-  ert-webapp:
-    container_name: ert-webapp
-    build:
-      context: ../ert-webapp
-    env_file:
-      - ./ert-webapp/.env
-    ports:
-      - 80:8080
-    volumes:
-      - ../ert-webapp:/app
-    entrypoint: ["/bin/sh", "-c", "npm install && npm run start:dev"]
+    ert-webapp:
+        container_name: ert-webapp
+        build:
+            context: ../ert-webapp
+        env_file:
+            - ./ert-webapp/.env
+        ports:
+            - 80:8080
+        volumes:
+            - ../ert-webapp:/app
+        entrypoint: ["/bin/sh", "-c", "npm install && npm run start:dev"]
 
-  database:
-    container_name: database
-    image: mariadb:lts-jammy
-    env_file:
-      - ./database/mariadb.env
+    database:
+        container_name: database
+        image: mariadb:lts-jammy
+        env_file:
+            - ./database/mariadb.env
 
-  adminer:
-    container_name: adminer
-    image: adminer:4.8.1-standalone
-    env_file:
-      - ./database/adminer.env
-    ports:
-      - 8090:8080
-    depends_on:
-      - database
+    adminer:
+        container_name: adminer
+        image: adminer:4.8.1-standalone
+        env_file:
+            - ./database/adminer.env
+        ports:
+            - 8090:8080
+        depends_on:
+            - database
 
-  redis:
-    image: redis:7.2.4-alpine3.19
-    container_name: redis
-    ports:
-      - 6379:6379
-    volumes:
-      - /data
-    entrypoint:
-      [
-        "redis-server",
-        "--save",
-        "60",
-        "1",
-        "--maxmemory",
-        "100mb",
-        "--maxmemory-policy",
-        "allkeys-lru",
-      ]
+    redis:
+        image: redis:7.2.4-alpine3.19
+        container_name: redis
+        ports:
+            - 6379:6379
+        volumes:
+            - /data
+        entrypoint:
+            [
+                "redis-server",
+                "--save",
+                "60",
+                "1",
+                "--maxmemory",
+                "100mb",
+                "--maxmemory-policy",
+                "allkeys-lru",
+            ]
 
-  rabbitmq:
-    image: rabbitmq:management-alpine
-    container_name: rabbitmq
-    ports:
-      - 5672:5672
-      - 15672:15672
+    rabbitmq:
+        image: rabbitmq:management-alpine
+        container_name: rabbitmq
+        ports:
+            - 5672:5672
+            - 15672:15672
